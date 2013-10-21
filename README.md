@@ -1,0 +1,4 @@
+jquery-pause
+============
+
+JQuery Pause
