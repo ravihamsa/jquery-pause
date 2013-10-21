@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jquery Pause</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.js"></script>
+    <style type="text/css">
+        #container {
+            width: 100px;
+            height: 200px;
+            background-color: #ffccff;
+            position: relative;
+            z-index: -1;
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+<div id="pause" class="button">Pause</div>
+<div id="resume" class="button">Resume</div>
+
+<div id="container"></div>
+
+
+
+
+<script type="text/javascript">
+
+
+    $('#pause').click(function(){
+        $('#container').pause();
+    })
+
+
+
+    $('#resume').click(function(){
+        $('#container').resume();
+    })
+
+
+    var oldAnimate = $.fn.animate;
+    $.fn.extend({
+        animate:function(prop, conf){
+            var _this= this;
+            conf.step =function(now, fx){
+                console.log(now, fx);
+                _this.data('tween', fx);
+                _this.data('now', now);
+            }
+            var args = Array.prototype.slice.call(arguments);
+            oldAnimate.apply(this, args);
+            return this;
+        },
+        pause: function( type, clearQueue, gotoEnd ) {
+            var fxQue = $('#container').queue('fx');
+            this.data('pausedQue', fxQue);
+            this.stop(true, false);
+        },
+        resume:function(){
+            var tween = this.data('tween');
+            var now = this.data('now');
+            tween.run();
+        }
+    })
+
+    var speed = 4000;
+    $('#container')
+            .animate({
+                left: "600px"
+            }, {duration:speed})
+            /*.animate({
+                left: "500px"
+            }, {duration:speed})
+            .animate({
+                left: "400px"
+            }, {duration:speed})
+            .animate({
+                left: "300px"
+            }, {duration:speed})
+            .animate({
+                left: "100px"
+            }, {duration:speed})
+            .animate({
+                left: "700px"
+            }, {duration:speed})
+            .animate({
+                left: "0px"
+            }, {duration:speed})*/
+</script>
+</body>
+</html>
